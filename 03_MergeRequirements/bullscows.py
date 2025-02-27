@@ -1,6 +1,8 @@
 import argparse
 import urllib.request
 import sys
+import cowsay
+import random
 
 
 def bulls_cows(guess: str, secret: str) -> tuple[int, int]:
@@ -17,7 +19,6 @@ def bulls_cows(guess: str, secret: str) -> tuple[int, int]:
 
 
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
-    import random
     secret_word = random.choice(words)
     attempt_cnt = 0
     while True:
@@ -27,23 +28,29 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
         inform("Быки: {}, Коровы: {}", b, c)
         if guess_word != secret_word:
             continue
-        print("Эты было не просто жёстко, это было очень жёстко!")
+        print(cowsay.cowsay(
+            "Эты было не просто жёстко, это было очень жёстко!", cow="dragon"))
         return attempt_cnt
 
 
 def ask(prompt: str, valid: list[str] = None) -> str:
+    available_cows = cowsay.list_cows()
     while True:
-        print(prompt)
+        random_cow = random.choice(available_cows)
+        print(cowsay.cowsay(prompt, cow=random_cow))
         guess_word = input()
         if guess_word not in valid:
-            print("Недопустимое слово")
+            random_cow = random.choice(available_cows)
+            print(cowsay.cowsay("Недопустимое слово", cow=random_cow))
             continue
         break
     return guess_word
 
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    available_cows = cowsay.list_cows()
+    random_cow = random.choice(available_cows)
+    print(cowsay.cowsay(format_string.format(bulls, cows), cow=random_cow))
 
 
 def load_words(source: str) -> list[str]:
