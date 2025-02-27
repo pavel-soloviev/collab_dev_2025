@@ -34,14 +34,13 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
 
 
 def ask(prompt: str, valid: list[str] = None) -> str:
-    available_cows = cowsay.list_cows()
+    with open("my_custom_cow.cow", "r") as f:
+        my_custom_cow = cowsay.read_dot_cow(f)
     while True:
-        random_cow = random.choice(available_cows)
-        print(cowsay.cowsay(prompt, cow=random_cow))
+        print(cowsay.cowsay(prompt, cowfile=my_custom_cow))
         guess_word = input()
         if guess_word not in valid:
-            random_cow = random.choice(available_cows)
-            print(cowsay.cowsay("Недопустимое слово", cow=random_cow))
+            print(cowsay.cowsay("Недопустимое слово", cowfile=my_custom_cow))
             continue
         break
     return guess_word
